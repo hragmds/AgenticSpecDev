@@ -1,0 +1,105 @@
+/speckit.constitution
+Banking
+
+Rules:
+- SDD is mandatory. The spec defines all behavior; code, plan, and tasks must follow it.
+- TDD is mandatory. 
+-- Every change follows red → green → refactor. No skipping tests.
+-- The core cycle involves writing a failing test, writing the minimum code to pass that test, and then refactoring the code to improve its design
+- MVP scope: no security work, no performance optimization. Only build what is needed for functionality.
+- Technical choices must maximize simplicity and testability.
+- AI agents must follow these rules; non-compliant outputs must be corrected.
+
+---------------------------------------------------------------------
+
+/speckit.specify
+
+Implement the feature specification based on the updated constitution. I want to build a new app.
+
+The app should let a user:
+- Log in with simple/fake authentication.
+- View a list of their accounts and balances.
+- View recent transactions.
+- Transfer money between their own accounts by choosing a source, destination, amount, and optional note.
+
+Pages and flows to include:
+- Login page → Dashboard.
+- Dashboard shows accounts, balances, recent transactions.
+- Transfer dialog flow.
+
+---------------------------------------------------------------------
+
+/speckit.clarify
+
+---------------------------------------------------------------------
+
+/speckit.plan
+
+Create a plan for the spec. I am building with 
+Tech stack:
+- Backend: Java 21, Gradle 9, Spring Boot.
+- Frontend: Angular with Tailwind CSS.
+- Database: SQLite.
+- TDD is a MUST. 
+-- Every change follows red → green → refactor. No skipping tests.
+-- The core cycle involves writing a failing test, writing the minimum code to pass that test, and then refactoring the code to improve its design
+
+Plan for:
+- Overall architecture (frontend ↔ backend ↔ DB).
+- Main backend modules (auth, accounts, transactions, transfers).
+- Main Angular modules/components (login, dashboard, accounts list, transactions list, transfer dialog).
+- How data flows between layers.
+
+
+---------------------------------------------------------------------
+
+Now I want you to go and audit the implementation plan and the implementation detail files.
+Read through it with an eye on determining whether or not there is a sequence of tasks that you need
+to be doing that are obvious from reading this. Because I don't know if there's enough here. For example,
+when I look at the core implementation, it would be useful to reference the appropriate places in the implementation
+details where it can find the information as it walks through each step in the core implementation or in the refinement.
+NO TASKS YET, we will generate tasks in future prompts
+
+
+---------------------------------------------------------------------
+
+use context 7 mcp to get documentation to help you implement the plan 
+
+
+---------------------------------------------------------------------
+
+/speckit.tasks
+
+---------------------------------------------------------------------
+
+/speckit.analyze
+
+---------------------------------------------------------------------
+
+yes suggest remediation for the top 5 issues
+
+---------------------------------------------------------------------
+
+suggest remediation for the rest of the issues
+
+---------------------------------------------------------------------
+
+/speckit.analyze
+
+---------------------------------------------------------------------
+
+/speckit.implement Follow instructions in speckit.implement.prompt.md.
+T001-T012 then make sure the apps starts
+
+
+---------------------------------------------------------------------
+
+can you check the front end with playright and see if its working fine as per the spec
+
+
+---------------------------------------------------------------------
+
+
+
+
+
