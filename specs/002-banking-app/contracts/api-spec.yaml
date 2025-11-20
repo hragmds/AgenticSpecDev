@@ -1,0 +1,443 @@
+openapi: 3.0.3
+info:
+  title: Banking App MVP API
+  description: REST API for banking application MVP with authentication, accounts, and transfers
+  version: 1.0.0
+  contact:
+    name: Banking App Team
+    
+servers:
+  - url: http://localhost:8080/api
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: User login and session management
+  - name: Accounts  
+    description: Account information and balances
+  - name: Transactions
+    description: Transaction history
+  - name: Transfers
+    description: Money transfer operations
+
+paths:
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Authenticate user and create session
+      description: |
+        Validates hardcoded credentials and returns session token.
+        For MVP: username "demo", password "password"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: "demo"
+              password: "password"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: "abc123xyz789"
+                username: "demo"
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Invalid username or password"
+                timestamp: "2025-11-19T10:30:00Z"
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: End user session
+      description: Invalidates current session token
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logged out successfully"
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /accounts:
+    get:
+      tags: [Accounts]
+      summary: Get user's accounts
+      description: |
+        Returns all accounts belonging to authenticated user.
+        Includes account details and current balances.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+              example:
+                - id: 1
+                  accountType: "CHECKING"
+                  accountName: "Primary Checking"
+                  balance: 1500.00
+                  createdAt: "2025-11-01T00:00:00Z"
+                - id: 2
+                  accountType: "SAVINGS"
+                  accountName: "Emergency Savings"
+                  balance: 5000.00
+                  createdAt: "2025-11-01T00:00:00Z"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /transactions:
+    get:
+      tags: [Transactions]
+      summary: Get recent transactions
+      description: |
+        Returns user's recent transaction history in reverse chronological order.
+        Limited to last 5 transactions for dashboard display.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of transactions to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 5
+        - name: accountId
+          in: query
+          description: Filter transactions for specific account
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+              example:
+                - id: 2
+                  fromAccountId: 2
+                  toAccountId: 1
+                  amount: 250.75
+                  description: "Emergency withdrawal"
+                  transactionDate: "2025-11-16T14:45:00Z"
+                - id: 1
+                  fromAccountId: 1
+                  toAccountId: 2
+                  amount: 100.00
+                  description: "Monthly savings"
+                  transactionDate: "2025-11-15T10:30:00Z"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /transfers:
+    post:
+      tags: [Transfers]
+      summary: Transfer money between accounts
+      description: |
+        Transfers money from one account to another.
+        Both accounts must belong to the authenticated user.
+        Validates sufficient balance and updates both accounts.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+            example:
+              fromAccountId: 1
+              toAccountId: 2
+              amount: 100.00
+              description: "Monthly savings transfer"
+      responses:
+        '200':
+          description: Transfer completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+              example:
+                transactionId: 3
+                fromAccount:
+                  id: 1
+                  balance: 1400.00
+                toAccount:
+                  id: 2
+                  balance: 5100.00
+                message: "Transfer completed successfully"
+        '400':
+          description: Invalid transfer request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                insufficientFunds:
+                  value:
+                    error: "Insufficient funds"
+                    timestamp: "2025-11-19T10:30:00Z"
+                sameAccount:
+                  value:
+                    error: "Cannot transfer to the same account"
+                    timestamp: "2025-11-19T10:30:00Z"
+                invalidAmount:
+                  value:
+                    error: "Amount must be positive with max 2 decimal places"
+                    timestamp: "2025-11-19T10:30:00Z"
+        '401':
+          description: Authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Account not found or not owned by user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Account not found or access denied"
+                timestamp: "2025-11-19T10:30:00Z"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Session token obtained from login endpoint
+      
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: User login name
+          example: "demo"
+        password:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: User password
+          example: "password"
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Session token for authenticated requests
+          example: "abc123xyz789"
+        username:
+          type: string
+          description: Authenticated username
+          example: "demo"
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique account identifier
+          example: 1
+        accountType:
+          type: string
+          enum: [CHECKING, SAVINGS]
+          description: Type of account
+          example: "CHECKING"
+        accountName:
+          type: string
+          maxLength: 100
+          description: Display name for account
+          example: "Primary Checking"
+        balance:
+          type: number
+          format: decimal
+          minimum: 0
+          multipleOf: 0.01
+          description: Current account balance
+          example: 1500.00
+        createdAt:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+          example: "2025-11-01T00:00:00Z"
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique transaction identifier
+          example: 1
+        fromAccountId:
+          type: integer
+          format: int64
+          nullable: true
+          description: Source account ID (null for deposits)
+          example: 1
+        toAccountId:
+          type: integer
+          format: int64
+          description: Destination account ID
+          example: 2
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          multipleOf: 0.01
+          description: Transaction amount
+          example: 100.00
+        description:
+          type: string
+          maxLength: 255
+          nullable: true
+          description: Optional transaction note
+          example: "Monthly savings"
+        transactionDate:
+          type: string
+          format: date-time
+          description: When transaction occurred
+          example: "2025-11-15T10:30:00Z"
+
+    TransferRequest:
+      type: object
+      required:
+        - fromAccountId
+        - toAccountId
+        - amount
+      properties:
+        fromAccountId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Source account ID
+          example: 1
+        toAccountId:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Destination account ID
+          example: 2
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          multipleOf: 0.01
+          description: Amount to transfer
+          example: 100.00
+        description:
+          type: string
+          maxLength: 255
+          description: Optional transfer note
+          example: "Monthly savings transfer"
+
+    TransferResponse:
+      type: object
+      properties:
+        transactionId:
+          type: integer
+          format: int64
+          description: ID of created transaction record
+          example: 3
+        fromAccount:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              example: 1
+            balance:
+              type: number
+              format: decimal
+              example: 1400.00
+        toAccount:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              example: 2
+            balance:
+              type: number
+              format: decimal
+              example: 5100.00
+        message:
+          type: string
+          description: Success confirmation message
+          example: "Transfer completed successfully"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong
+          example: "Invalid username or password"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred
+          example: "2025-11-19T10:30:00Z"
+        path:
+          type: string
+          description: Request path where error occurred
+          example: "/api/auth/login"
