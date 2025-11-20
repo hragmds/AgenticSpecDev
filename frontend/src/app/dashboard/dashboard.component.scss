@@ -1,1 +1,37 @@
 /* Dashboard component styles */
+
+// Animation for loading spinner
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+// Responsive grid for accounts
+:host ::ng-deep {
+  .accounts-grid {
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr !important;
+    }
+  }
+}
+
+// Transaction table responsive behavior
+:host ::ng-deep {
+  table {
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+
+      th, td {
+        padding: 0.5rem;
+      }
+    }
+  }
+}

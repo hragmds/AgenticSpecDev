@@ -1,0 +1,188 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Navigation Header -->
+  <nav class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <h1 class="text-xl font-semibold text-gray-900">Banking MVP</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm text-gray-700">
+            Welcome, {{ currentUser$ | async }}
+          </span>
+          <button
+            (click)="logout()"
+            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="space-y-6">
+      <!-- Accounts Section -->
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Your Accounts</h3>
+
+          <!-- Loading State -->
+          <div *ngIf="loadingAccounts" class="flex justify-center items-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span class="ml-3 text-gray-600">Loading accounts...</span>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="accountsError && !loadingAccounts" class="rounded-md bg-red-50 p-4 mb-4">
+            <div class="flex">
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">{{ accountsError }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accounts List -->
+          <div *ngIf="!loadingAccounts && (accounts$ | async) as accounts" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <div
+              *ngFor="let account of accounts"
+              class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+              <div class="flex justify-between items-start mb-2">
+                <h4 class="text-sm font-semibold text-gray-900">{{ account.accountName }}</h4>
+                <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded">
+                  {{ account.accountType }}
+                </span>
+              </div>
+              <div class="text-2xl font-bold text-gray-900 mb-2">
+                ${{ account.balance | number: '1.2-2' }}
+              </div>
+              <div class="text-xs text-gray-500">
+                Account ID: {{ account.id }}
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="accounts.length === 0" class="col-span-full text-center py-8 text-gray-500">
+              No accounts found
+            </div>
+          </div>
+
+          <!-- Retry Button -->
+          <button
+            *ngIf="accountsError && !loadingAccounts"
+            (click)="loadAccounts()"
+            class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+            Retry Loading Accounts
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Transactions Section -->
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Recent Transactions (Last 5)</h3>
+
+          <!-- Loading State -->
+          <div *ngIf="loadingTransactions" class="flex justify-center items-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span class="ml-3 text-gray-600">Loading transactions...</span>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="transactionsError && !loadingTransactions" class="rounded-md bg-red-50 p-4 mb-4">
+            <div class="flex">
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-red-800">{{ transactionsError }}</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div *ngIf="!loadingTransactions && (transactions$ | async) as transactions" class="overflow-x-auto">
+            <table *ngIf="transactions.length > 0" class="w-full text-sm">
+              <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th class="px-4 py-3 text-left font-medium text-gray-900">From</th>
+                  <th class="px-4 py-3 text-left font-medium text-gray-900">To</th>
+                  <th class="px-4 py-3 text-right font-medium text-gray-900">Amount</th>
+                  <th class="px-4 py-3 text-left font-medium text-gray-900">Description</th>
+                  <th class="px-4 py-3 text-left font-medium text-gray-900">Date</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr *ngFor="let transaction of transactions" class="hover:bg-gray-50">
+                  <td class="px-4 py-3 text-gray-900">A{{ transaction.fromAccountId }}</td>
+                  <td class="px-4 py-3 text-gray-900">A{{ transaction.toAccountId }}</td>
+                  <td class="px-4 py-3 text-right text-gray-900 font-medium">
+                    ${{ transaction.amount | number: '1.2-2' }}
+                  </td>
+                  <td class="px-4 py-3 text-gray-600">{{ transaction.description || '-' }}</td>
+                  <td class="px-4 py-3 text-gray-600 text-xs">
+                    {{ transaction.transactionDate | date: 'short' }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Empty State -->
+            <div *ngIf="transactions.length === 0" class="text-center py-8 text-gray-500">
+              No transactions found
+            </div>
+          </div>
+
+          <!-- Retry Button -->
+          <button
+            *ngIf="transactionsError && !loadingTransactions"
+            (click)="loadTransactions()"
+            class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+            Retry Loading Transactions
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Section -->
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Implementation Status</h3>
+
+          <!-- Phase 3 Status -->
+          <div class="rounded-md bg-green-50 p-4 mb-4">
+            <div class="flex">
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-green-800">✅ Phase 3 Complete - User Authentication</h3>
+                <div class="mt-2 text-sm text-green-700 space-y-1">
+                  <p>✅ Auth service with login/logout functionality</p>
+                  <p>✅ Login component with reactive forms</p>
+                  <p>✅ Login template with Tailwind CSS styling</p>
+                  <p>✅ Auth guard for route protection</p>
+                  <p>✅ Protected routes configuration</p>
+                  <p>✅ Session management with localStorage</p>
+                  <p>✅ Backend API integration working</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 4 Status -->
+          <div class="rounded-md bg-blue-50 p-4">
+            <div class="flex">
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">🎯 Phase 4 In Progress - Account Overview</h3>
+                <div class="mt-2 text-sm text-blue-700 space-y-1">
+                  <p>✅ Account service with API integration</p>
+                  <p>✅ Transaction service with API integration</p>
+                  <p>✅ Dashboard component with data loading</p>
+                  <p>✅ Display user accounts and balances</p>
+                  <p>✅ Show recent transactions (last 5)</p>
+                  <p>🔄 Account-list and transaction-list sub-components (next)</p>
+                  <p>🔄 Form validation and error handling (next)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

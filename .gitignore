@@ -1,0 +1,82 @@
+# Banking App MVP - .gitignore
+# Generated for Java/Spring Boot + Angular/TypeScript project
+
+# Java / Spring Boot
+backend/target/
+backend/build/
+backend/*.class
+backend/*.jar
+backend/.gradle/
+backend/gradle-app.setting
+backend/!gradle-wrapper.jar
+backend/.gradletasknamecache
+backend/out/
+backend/.nb-gradle/
+
+# Node.js / Angular
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/*.log
+frontend/.angular/
+frontend/.nx/cache
+frontend/coverage/
+frontend/.nyc_output/
+frontend/*.tgz
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+
+# SQLite Database
+*.db
+*.sqlite
+*.sqlite3
+banking.db
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# IDE Files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.metadata
+.classpath
+.settings/
+*.iml
+*.iws
+*.ipr
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+tmp/
+temp/
+
+# Application Specific
+backend/src/main/resources/static/
+backend/src/main/resources/public/

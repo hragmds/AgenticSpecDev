@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/auth.guard';
 
 /**
  * Main routing configuration for the banking application.
  * 
  * Routes:
- * - /login: Authentication page
- * - /dashboard: Main account overview (protected)
- * - /transfer: Money transfer page (protected)
- * - Default: Redirect to dashboard
+ * - /login: Authentication page (redirects authenticated users)
+ * - /dashboard: Main account overview (protected by AuthGuard)
+ * - /transfer: Money transfer page (protected by AuthGuard)
+ * - Default: Redirect to login for unauthenticated, dashboard for authenticated
  */
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
@@ -23,16 +24,16 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-    // canActivate: [AuthGuard] // TODO: Add when AuthGuard is implemented
+    canActivate: [AuthGuard]
   },
   {
     path: 'transfer',
     loadChildren: () => import('./transfer/transfer.module').then(m => m.TransferModule),
-    // canActivate: [AuthGuard] // TODO: Add when AuthGuard is implemented
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
-    redirectTo: '/dashboard'
+    redirectTo: '/login'
   }
 ];
 

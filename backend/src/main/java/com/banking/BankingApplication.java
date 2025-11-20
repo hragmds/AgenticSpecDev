@@ -2,6 +2,8 @@ package com.banking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * Main Spring Boot application class for Banking MVP.
@@ -12,6 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * - Database initialization via application.yml
  */
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.banking")
+@EntityScan(basePackages = "com.banking")
 public class BankingApplication {
 
     public static void main(String[] args) {

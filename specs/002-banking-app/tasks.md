@@ -44,6 +44,7 @@ Web application structure:
 - [x] T007 Setup database schema and JPA configuration in backend/src/main/java/com/banking/config/DatabaseConfig.java
 - [x] T008 Configure CORS and security settings in backend/src/main/java/com/banking/config/SecurityConfig.java
 - [x] T009 [P] Setup global error handling in backend/src/main/java/com/banking/config/GlobalExceptionHandler.java
+- [x] T009.1 [P] Enhanced GlobalExceptionHandler with HTTP-specific error handling (JSON parsing, media type)
 - [x] T010 [P] Configure shared API service in frontend/src/app/shared/api.service.ts
 - [x] T011 [P] Setup routing configuration in frontend/src/app/app-routing.module.ts
 - [x] T012 Create base application entry point in backend/src/main/java/com/banking/BankingApplication.java
@@ -62,27 +63,29 @@ Web application structure:
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T013 [P] [US1] Write UserRepository test in backend/src/test/java/com/banking/auth/UserRepositoryTest.java
-- [ ] T014 [P] [US1] Write AuthService unit test in backend/src/test/java/com/banking/auth/AuthServiceTest.java
-- [ ] T015 [P] [US1] Write AuthController integration test in backend/src/test/java/com/banking/auth/AuthControllerTest.java
-- [ ] T016 [P] [US1] Write AuthService component test in frontend/src/test/auth/auth.service.spec.ts
-- [ ] T017 [P] [US1] Write LoginComponent unit test in frontend/src/test/auth/login/login.component.spec.ts
-- [ ] T018 [P] [US1] Write AuthGuard unit test in frontend/src/test/auth/auth.guard.spec.ts
+- [x] T013 [P] [US1] Write UserRepository test in backend/src/test/java/com/banking/auth/UserRepositoryTest.java
+- [x] T014 [P] [US1] Write AuthService unit test in backend/src/test/java/com/banking/auth/AuthServiceTest.java
+- [x] T015 [P] [US1] Write AuthController integration test in backend/src/test/java/com/banking/auth/AuthControllerTest.java
+- [x] T016 [P] [US1] Write AuthService component test in frontend/src/test/auth/auth.service.spec.ts
+- [x] T017 [P] [US1] Write LoginComponent unit test in frontend/src/test/auth/login/login.component.spec.ts
+- [x] T018 [P] [US1] Write AuthGuard unit test in frontend/src/test/auth/auth.guard.spec.ts
 
 ### Implementation for User Story 1
 
-- [ ] T019 [P] [US1] Create User entity in backend/src/main/java/com/banking/auth/User.java
-- [ ] T020 [P] [US1] Create LoginRequest DTO in backend/src/main/java/com/banking/auth/LoginRequest.java
-- [ ] T021 [US1] Create UserRepository interface in backend/src/main/java/com/banking/auth/UserRepository.java (depends on T019)
-- [ ] T022 [US1] Implement AuthService in backend/src/main/java/com/banking/auth/AuthService.java (depends on T021)
-- [ ] T023 [US1] Implement AuthController in backend/src/main/java/com/banking/auth/AuthController.java (depends on T022)
-- [ ] T024 [P] [US1] Create auth.service.ts in frontend/src/app/auth/auth.service.ts
-- [ ] T025 [P] [US1] Create login component in frontend/src/app/auth/login/login.component.ts
-- [ ] T026 [P] [US1] Create login template in frontend/src/app/auth/login/login.component.html
-- [ ] T027 [P] [US1] Create login styles in frontend/src/app/auth/login/login.component.scss
-- [ ] T028 [US1] Create auth guard in frontend/src/app/auth/auth.guard.ts (depends on T024)
-- [ ] T029 [US1] Add initial user data in backend/src/main/resources/data.sql (depends on T019)
-- [ ] T030 [US1] Configure protected routes and auth integration in frontend/src/app/app-routing.module.ts
+- [x] T019 [P] [US1] Create User entity in backend/src/main/java/com/banking/auth/User.java
+- [x] T020 [P] [US1] Create LoginRequest DTO in backend/src/main/java/com/banking/auth/LoginRequest.java
+- [x] T020.1 [P] [US1] Create LoginResponse DTO in backend/src/main/java/com/banking/auth/LoginResponse.java
+- [x] T021 [US1] Create UserRepository interface in backend/src/main/java/com/banking/auth/UserRepository.java (depends on T019)
+- [x] T022 [US1] Implement AuthService in backend/src/main/java/com/banking/auth/AuthService.java (depends on T021)
+- [x] T023 [US1] Implement AuthController in backend/src/main/java/com/banking/auth/AuthController.java (depends on T022)
+- [x] T023.1 [US1] Create DataInitializer for demo user in backend/src/main/java/com/banking/auth/DataInitializer.java (depends on T019)
+- [x] T024 [P] [US1] Create auth.service.ts in frontend/src/app/auth/auth.service.ts
+- [x] T025 [P] [US1] Create login component in frontend/src/app/auth/login/login.component.ts
+- [x] T026 [P] [US1] Create login template in frontend/src/app/auth/login/login.component.html
+- [x] T027 [P] [US1] Create login styles in frontend/src/app/auth/login/login.component.scss
+- [x] T028 [US1] Create auth guard in frontend/src/app/auth/auth.guard.ts (depends on T024)
+- [x] T029 [US1] Add initial user data in backend/src/main/resources/data.sql (depends on T019)
+- [x] T030 [US1] Configure protected routes and auth integration in frontend/src/app/app-routing.module.ts
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -96,40 +99,40 @@ Web application structure:
 
 ### Tests for User Story 2 (TDD Required) ✅
 
-- [ ] T031 [P] [US2] Write AccountRepository test in backend/src/test/java/com/banking/accounts/AccountRepositoryTest.java
-- [ ] T032 [P] [US2] Write TransactionRepository test in backend/src/test/java/com/banking/transactions/TransactionRepositoryTest.java
-- [ ] T033 [P] [US2] Write AccountService unit test in backend/src/test/java/com/banking/accounts/AccountServiceTest.java
-- [ ] T034 [P] [US2] Write TransactionService unit test in backend/src/test/java/com/banking/transactions/TransactionServiceTest.java
-- [ ] T035 [P] [US2] Write AccountController integration test in backend/src/test/java/com/banking/accounts/AccountControllerTest.java
-- [ ] T036 [P] [US2] Write TransactionController integration test in backend/src/test/java/com/banking/transactions/TransactionControllerTest.java
+- [x] T031 [P] [US2] Write AccountRepository test in backend/src/test/java/com/banking/accounts/AccountRepositoryTest.java
+- [x] T032 [P] [US2] Write TransactionRepository test in backend/src/test/java/com/banking/transactions/TransactionRepositoryTest.java
+- [x] T033 [P] [US2] Write AccountService unit test in backend/src/test/java/com/banking/accounts/AccountServiceTest.java
+- [x] T034 [P] [US2] Write TransactionService unit test in backend/src/test/java/com/banking/transactions/TransactionServiceTest.java
+- [x] T035 [P] [US2] Write AccountController integration test in backend/src/test/java/com/banking/accounts/AccountControllerTest.java
+- [x] T036 [P] [US2] Write TransactionController integration test in backend/src/test/java/com/banking/transactions/TransactionControllerTest.java
 - [ ] T037 [P] [US2] Write DashboardComponent test in frontend/src/test/dashboard/dashboard.component.spec.ts
 - [ ] T038 [P] [US2] Write AccountService test in frontend/src/test/accounts/account.service.spec.ts
 - [ ] T039 [P] [US2] Write TransactionService test in frontend/src/test/transactions/transaction.service.spec.ts
 
 ### Implementation for User Story 2
 
-- [ ] T040 [P] [US2] Create Account entity in backend/src/main/java/com/banking/accounts/Account.java
-- [ ] T041 [P] [US2] Create Transaction entity in backend/src/main/java/com/banking/transactions/Transaction.java
-- [ ] T042 [US2] Create AccountRepository interface in backend/src/main/java/com/banking/accounts/AccountRepository.java (depends on T040)
-- [ ] T043 [US2] Create TransactionRepository interface in backend/src/main/java/com/banking/transactions/TransactionRepository.java (depends on T041)
-- [ ] T044 [US2] Implement AccountService in backend/src/main/java/com/banking/accounts/AccountService.java (depends on T042)
-- [ ] T045 [US2] Implement TransactionService in backend/src/main/java/com/banking/transactions/TransactionService.java (depends on T043)
-- [ ] T045A [US2] Add transaction limit validation to TransactionService.getRecentTransactions() method ensuring exactly 5 transactions returned per FR-006
-- [ ] T046 [US2] Implement AccountController in backend/src/main/java/com/banking/accounts/AccountController.java (depends on T044)
-- [ ] T047 [US2] Implement TransactionController in backend/src/main/java/com/banking/transactions/TransactionController.java (depends on T045)
-- [ ] T048 [US2] Add initial account and transaction test data in backend/src/main/resources/data.sql (depends on T040, T041)
-- [ ] T049 [P] [US2] Create account.model.ts in frontend/src/app/accounts/account.model.ts
-- [ ] T050 [P] [US2] Create transaction.model.ts in frontend/src/app/transactions/transaction.model.ts
-- [ ] T051 [P] [US2] Create account.service.ts in frontend/src/app/accounts/account.service.ts
-- [ ] T052 [P] [US2] Create transaction.service.ts in frontend/src/app/transactions/transaction.service.ts
-- [ ] T053 [P] [US2] Create dashboard component in frontend/src/app/dashboard/dashboard.component.ts
-- [ ] T054 [P] [US2] Create dashboard template in frontend/src/app/dashboard/dashboard.component.html
-- [ ] T055 [P] [US2] Create dashboard styles in frontend/src/app/dashboard/dashboard.component.scss
-- [ ] T056 [P] [US2] Create account-list component in frontend/src/app/accounts/account-list/account-list.component.ts
-- [ ] T057 [P] [US2] Create account-list template in frontend/src/app/accounts/account-list/account-list.component.html
-- [ ] T058 [P] [US2] Create transaction-list component in frontend/src/app/transactions/transaction-list/transaction-list.component.ts
-- [ ] T059 [P] [US2] Create transaction-list template in frontend/src/app/transactions/transaction-list/transaction-list.component.html
-- [ ] T060 [US2] Integrate dashboard with account and transaction services in frontend/src/app/dashboard/dashboard.component.ts
+- [x] T040 [P] [US2] Create Account entity in backend/src/main/java/com/banking/accounts/Account.java
+- [x] T041 [P] [US2] Create Transaction entity in backend/src/main/java/com/banking/transactions/Transaction.java
+- [x] T042 [US2] Create AccountRepository interface in backend/src/main/java/com/banking/accounts/AccountRepository.java (depends on T040)
+- [x] T043 [US2] Create TransactionRepository interface in backend/src/main/java/com/banking/transactions/TransactionRepository.java (depends on T041)
+- [x] T044 [US2] Implement AccountService in backend/src/main/java/com/banking/accounts/AccountService.java (depends on T042)
+- [x] T045 [US2] Implement TransactionService in backend/src/main/java/com/banking/transactions/TransactionService.java (depends on T043)
+- [x] T045A [US2] Add transaction limit validation to TransactionService.getRecentTransactions() method ensuring exactly 5 transactions returned per FR-006
+- [x] T046 [US2] Implement AccountController in backend/src/main/java/com/banking/accounts/AccountController.java (depends on T044)
+- [x] T047 [US2] Implement TransactionController in backend/src/main/java/com/banking/transactions/TransactionController.java (depends on T045)
+- [x] T048 [US2] Add initial account and transaction test data in backend/src/main/resources/data.sql (depends on T040, T041)
+- [x] T049 [P] [US2] Create account.model.ts in frontend/src/app/accounts/account.model.ts
+- [x] T050 [P] [US2] Create transaction.model.ts in frontend/src/app/transactions/transaction.model.ts
+- [x] T051 [P] [US2] Create account.service.ts in frontend/src/app/accounts/account.service.ts
+- [x] T052 [P] [US2] Create transaction.service.ts in frontend/src/app/transactions/transaction.service.ts
+- [x] T053 [P] [US2] Create dashboard component in frontend/src/app/dashboard/dashboard.component.ts
+- [x] T054 [P] [US2] Create dashboard template in frontend/src/app/dashboard/dashboard.component.html
+- [x] T055 [P] [US2] Create dashboard styles in frontend/src/app/dashboard/dashboard.component.scss
+- [x] T056 [P] [US2] Create account-list component in frontend/src/app/accounts/account-list/account-list.component.ts
+- [x] T057 [P] [US2] Create account-list template in frontend/src/app/accounts/account-list/account-list.component.html
+- [x] T058 [P] [US2] Create transaction-list component in frontend/src/app/transactions/transaction-list/transaction-list.component.ts
+- [x] T059 [P] [US2] Create transaction-list template in frontend/src/app/transactions/transaction-list/transaction-list.component.html
+- [x] T060 [US2] Integrate dashboard with account and transaction services in frontend/src/app/dashboard/dashboard.component.ts
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
