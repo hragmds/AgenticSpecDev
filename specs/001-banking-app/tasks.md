@@ -388,7 +388,9 @@
   - Reference: Retrieved Tailwind CSS documentation for form and modal styling
 - [ ] T077 [US3] Update DashboardComponent in `frontend/src/app/features/dashboard/dashboard.component.ts`:
   - Add method `openTransferDialog()` to show TransferDialogComponent
-  - Add method `refreshData()` to reload accounts and transactions after successful transfer
+  - Add method `onTransferComplete()` to handle successful transfer callback
+  - In `onTransferComplete()`: call `loadDashboardData()` to refresh accounts and transactions
+  - Wire transfer dialog close event to trigger `onTransferComplete()` on success
   - Reference: [Data Flow](./plan.md#flow-3-money-transfer-priority-p3) steps 10-11
 - [ ] T078 [US3] Update DashboardComponent template in `frontend/src/app/features/dashboard/dashboard.component.html`:
   - Wire "Transfer Money" button to call `openTransferDialog()`
@@ -426,7 +428,8 @@
 
 - [ ] T079 [P] Add comprehensive error messages for all validation failures per FR-018 and FR-019:
   - Backend: Create custom exception classes and @ControllerAdvice for global error handling
-  - Frontend: Display user-friendly error messages for each validation scenario
+  - Frontend: Display user-friendly error messages for each validation scenario using templates from [spec.md](./spec.md) "Error Message Templates" section
+  - Verify all 7 transfer validation scenarios and 2 authentication scenarios display correct messages
 - [ ] T080 [P] Add loading spinners to all components during API calls:
   - DashboardComponent: Show spinner while fetching accounts/transactions
   - TransferDialogComponent: Disable form and show spinner during transfer submission
@@ -447,31 +450,46 @@
   - Test dashboard load time < 2 seconds (SC-005)
   - Test transfer balance update < 1 second (SC-003)
   - Test login to dashboard < 10 seconds (SC-001)
-  - Verify 95% success rate for first-time transfers (SC-004)
-- [ ] T085 [P] Run full test suite:
-  - Backend: `cd backend && ./gradlew test` - verify all tests pass and coverage >80% (TDD compliance)
-  - Frontend: `cd frontend && ng test` - verify all tests pass
-- [ ] T086 [P] Validate against functional requirements checklist:
-  - Cross-reference FR-001 through FR-019 in [spec.md](./spec.md) with implemented features
-  - Mark each as ✅ in tracking document
-- [ ] T087 [P] Validate against Success Criteria:
-  - Verify SC-001 through SC-008 measurements documented
-  - Document test results
-- [ ] T088 Run quickstart.md validation:
+  - Verify 95% success rate for first-time transfers (SC-004): Execute 10 test scenarios with valid transfer data (different amounts, account combinations), record successful submissions without validation errors, calculate success rate (target: ≥9.5/10)
+- [ ] T085 [P] Run comprehensive validation and testing:
+  - **Test Suite Execution**:
+    - Backend: `cd backend && ./gradlew test` - verify all tests pass and coverage >80% (TDD compliance)
+    - Frontend: `cd frontend && ng test` - verify all tests pass
+  - **Functional Requirements Validation**:
+    - Cross-reference FR-001 through FR-019 in [spec.md](./spec.md) with implemented features
+    - Mark each as ✅ in tracking document
+  - **Success Criteria Validation**:
+    - Verify SC-001 through SC-008 measurements documented
+    - Document test results for each criterion
+- [ ] T086 Run quickstart.md validation:
   - Follow all steps in [quickstart.md](./quickstart.md) from clean environment
   - Verify application runs successfully
   - Document any missing steps or errors
-- [ ] T089 Final acceptance testing:
+- [ ] T087 Final acceptance testing:
   - Execute all acceptance scenarios from User Stories 1, 2, 3 in [spec.md](./spec.md)
   - Verify all edge cases handled gracefully
   - Document any deviations or issues
-- [ ] T090 Constitution compliance verification:
+- [ ] T088 [P] API contract validation:
+  - Validate implemented endpoints against [contracts/api.yaml](./contracts/api.yaml) OpenAPI schema
+  - Verify request/response structures match schemas for all 5 endpoints:
+    - POST /api/auth/login (LoginRequest → LoginResponse)
+    - POST /api/auth/logout
+    - GET /api/accounts (→ AccountDto[])
+    - GET /api/transactions/recent (→ TransactionDto[])
+    - POST /api/transfers (TransferRequest → TransferResponse)
+  - Verify error response structures match ErrorResponse schema
+  - Document any deviations
+- [ ] T089 Constitution compliance verification:
   - Verify no features outside spec (Principle III)
   - Verify no security hardening beyond MVP (Principle III)
   - Verify no performance optimization beyond requirements (Principle III)
   - Verify simplest possible implementation (Principle IV)
 
 **Final Checkpoint**: Application complete, tested, and ready for deployment
+
+**Note**: Task consolidation reduced total from 90 to 89 tasks (T085-T087 merged into comprehensive validation task T085; new T088 added for API contract validation)
+
+**Note**: Task consolidation reduced total from 90 to 89 tasks (T085-T087 merged into single comprehensive validation task T085)
 
 ---
 
@@ -542,7 +560,7 @@ Within each phase, all tasks marked `[P]` can be executed in parallel:
 **Phase 4 (US2 Implementation)**: T048-T051, T056-T057, T060, T062 (8 parallel tasks)
 **Phase 5 (US3 Tests)**: T064-T068 (5 parallel)
 **Phase 5 (US3 Implementation)**: T069-T071, T074 (4 parallel)
-**Phase 6 (Polish)**: T079-T082, T085-T090 (8 parallel tasks)
+**Phase 6 (Polish)**: T079-T082, T085, T088 (6 parallel tasks)
 
 ---
 
@@ -619,7 +637,7 @@ Each FR maps to specific implementation tasks:
 
 ---
 
-## Total Task Count: 90 tasks
+## Total Task Count: 89 tasks
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 6 tasks
@@ -627,9 +645,14 @@ Each FR maps to specific implementation tasks:
 - Phase 3 (US1): 23 tasks (5 test + 18 implementation)
 - Phase 4 (US2): 27 tasks (11 test + 16 implementation)
 - Phase 5 (US3): 15 tasks (5 test + 10 implementation)
-- Phase 6 (Polish): 12 tasks
+- Phase 6 (Polish): 6 tasks (consolidated validation)
 
-**Parallel Opportunities**: 58 tasks marked [P] can execute in parallel (64% of total)
+**Parallel Opportunities**: 56 tasks marked [P] can execute in parallel (63% of total)
+
+**Task Consolidation Notes**:
+- T085-T087 merged into single comprehensive validation task (T085)
+- T088 added for API contract validation
+- T089 renumbered from T090 (Constitution compliance)
 
 **Estimated Timeline** (single developer, sequential):
 - Phase 1: 1 day

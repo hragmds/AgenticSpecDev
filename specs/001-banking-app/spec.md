@@ -14,6 +14,22 @@
 - Q: How should the system handle concurrent transfer attempts? → A: First-come-first-served: Process transfers sequentially in order received; later transfers may fail if balance insufficient
 - Q: What is the scope of recent transactions? → A: Last 10 transactions regardless of date
 - Q: What should happen when a user's session expires during a transfer? → A: Redirect to login page and discard the in-progress transfer (user must start over)
+- Q: What specific error messages should be shown for validation failures? → A: See Error Message Templates below
+
+### Error Message Templates
+
+**Authentication Errors (FR-018)**:
+- Empty username or password: "Please enter both username and password"
+- Login failed (any other reason): "Login failed. Please try again."
+
+**Transfer Validation Errors (FR-019)**:
+- Insufficient balance: "Transfer failed: Insufficient funds. Available balance: $[amount]"
+- Amount less than or equal to zero: "Amount must be greater than zero"
+- Source equals destination: "Cannot transfer to the same account. Please select a different destination."
+- Invalid amount format: "Amount must be a valid number with up to 2 decimal places"
+- Session expired during transfer: "Your session has expired. Please log in again to continue."
+- Account not found: "Selected account not found. Please refresh and try again."
+- General transfer error: "Transfer failed. Please try again or contact support."
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -90,7 +106,7 @@ A user needs to move money between their own accounts (e.g., from checking to sa
 - **FR-003**: System MUST redirect unauthenticated users attempting to access protected pages to the login page
 - **FR-004**: System MUST display all accounts belonging to the authenticated user on the dashboard
 - **FR-005**: System MUST show current balance for each account in USD format with 2 decimal places (e.g., $1,234.56)
-- **FR-006**: System MUST display the 10 most recent transactions (regardless of date) with date, description, and amount in USD format with 2 decimal places
+- **FR-006**: System MUST display the 10 most recent transactions per account (regardless of date) with date, description, and amount in USD format with 2 decimal places
 - **FR-007**: System MUST provide a transfer interface accessible from the dashboard
 - **FR-008**: System MUST allow users to select a source account for transfers
 - **FR-009**: System MUST allow users to select a destination account from their other accounts (excluding the source account)
@@ -111,6 +127,7 @@ A user needs to move money between their own accounts (e.g., from checking to sa
 - **Account**: Represents a financial account belonging to a user; has a unique identifier, account type (checking, savings), account number, and current balance in USD with 2 decimal precision
 - **Transaction**: Represents a financial activity on an account; has a date/timestamp, description, amount in USD with 2 decimal precision (positive or negative), and optional note; for transfers, linked to both source and destination accounts
 - **Transfer**: A special type of transaction representing money movement between two accounts owned by the same user; includes source account, destination account, amount, optional note, and timestamp
+- **Session Token**: A unique string identifier used to maintain user authentication state; generated upon successful login, sent via HTTP header (X-Session-Token) on all authenticated requests, and invalidated upon logout or expiry
 
 ## Success Criteria *(mandatory)*
 
@@ -119,7 +136,7 @@ A user needs to move money between their own accounts (e.g., from checking to sa
 - **SC-001**: Users can log in and reach their dashboard in under 10 seconds
 - **SC-002**: Users can complete an account-to-account transfer in under 30 seconds from dashboard to confirmation
 - **SC-003**: Account balances update immediately (within 1 second) after transfer confirmation
-- **SC-004**: 95% of users successfully complete their first transfer without errors on their first attempt
+- **SC-004**: 95% of users successfully complete their first transfer without errors on their first attempt (Testing methodology: 10 unique test scenarios with valid data, measure successful submissions without validation errors; target: ≥9.5/10 succeed)
 - **SC-005**: The dashboard displays all account information within 2 seconds of page load
 - **SC-006**: System prevents 100% of invalid transfers (negative amounts, insufficient funds, same account transfers) before processing
 - **SC-007**: Users can view at least the 10 most recent transactions per account on the dashboard

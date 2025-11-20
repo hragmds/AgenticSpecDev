@@ -474,7 +474,10 @@ Frontend handles 401:
 - `TransferService.executeTransfer(TransferRequest) → TransferResponse`
 - `TransferService.validateTransfer(request) → void` (throws on failure)
 
-**Critical**: `executeTransfer` method is `synchronized` to ensure sequential processing per constitution requirement.
+**Critical**: 
+- `executeTransfer` method is `synchronized` to ensure sequential processing per constitution requirement
+- Method is annotated with `@Transactional` to ensure atomic database updates; if session expires mid-transfer or any error occurs, Spring automatically rolls back all database changes (no partial transfers possible)
+- Transaction boundary: begins at method entry, commits on successful completion, rolls back on any exception
 
 ### Frontend Modules
 
@@ -500,8 +503,13 @@ Frontend handles 401:
 **Key Features**:
 - Grid layout (Tailwind CSS)
 - Real-time data from API
-- "Transfer" button to open transfer dialog
-- Auto-refresh after transfers
+- "Transfer" button to open transfer dialog via `openTransferDialog()` method
+- Auto-refresh after transfers (reload accounts and transactions on successful transfer)
+
+**Key Methods**:
+- `loadDashboardData()`: Fetch accounts and transactions using forkJoin
+- `openTransferDialog()`: Show TransferDialogComponent modal
+- `onTransferComplete()`: Refresh dashboard data after successful transfer
 
 #### 3. Transfer Module (features/transfer/)
 **Purpose**: Money transfer interface  
