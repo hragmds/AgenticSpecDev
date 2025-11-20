@@ -15,7 +15,7 @@ Banking MVP with three-tier architecture: Angular frontend with Tailwind CSS, Sp
 **Testing**: JUnit 5 + Mockito (backend), Jasmine + Karma (frontend)  
 **Target Platform**: Web application (desktop browsers)
 **Project Type**: Web app - backend/src/, frontend/src/  
-**Performance Goals**: Dashboard load <2s, transfer completion <1min (per spec)  
+**Performance Goals**: Per success criteria in spec.md (SC-002, SC-003)  
 **Constraints**: MVP scope - no security, no performance optimization  
 **Scale/Scope**: Single test user, 2-3 accounts, session-based persistence
 
@@ -205,7 +205,7 @@ frontend/
 
 ### User Story 2 - Account Overview Implementation
 - **Entity Specifications**: See [data-model.md](./data-model.md) lines 50-85 (Account and Transaction entities)
-- **JPA Relationships**: See [data-model.md](./data-model.md) lines 280-295 (Entity mapping annotations)
+- **JPA Entity Mappings**: See [data-model.md](./data-model.md) lines 280-295 (Entity annotations with @JoinColumn for foreign keys)
 - **Repository Patterns**: See [research.md](./research.md) lines 180-200 (JPA repository queries)
 - **Controller Examples**: See [research.md](./research.md) lines 111-130 (REST controller pattern)
 - **API Contracts**: See [contracts/api-spec.yaml](./contracts/api-spec.yaml) lines 80-120 (/accounts and /transactions)

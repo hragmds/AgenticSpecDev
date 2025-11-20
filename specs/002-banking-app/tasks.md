@@ -26,12 +26,12 @@ Web application structure:
 
 **Purpose**: Project initialization and basic structure per plan.md
 
-- [ ] T001 Create backend project structure with Spring Boot 3.x in backend/
-- [ ] T002 Create frontend project structure with Angular 18+ in frontend/
-- [ ] T003 [P] Configure Gradle build for backend in backend/build.gradle
-- [ ] T004 [P] Setup Gradle wrapper in backend/gradle/wrapper/
-- [ ] T005 [P] Configure Angular CLI and Tailwind CSS in frontend/package.json
-- [ ] T006 [P] Setup SQLite configuration in backend/src/main/resources/application.yml
+- [x] T001 Create backend project structure with Spring Boot 3.x in backend/
+- [x] T002 Create frontend project structure with Angular 18+ in frontend/
+- [x] T003 [P] Configure Gradle build for backend in backend/build.gradle
+- [x] T004 [P] Setup Gradle wrapper in backend/gradle/wrapper/
+- [x] T005 [P] Configure Angular CLI and Tailwind CSS in frontend/package.json
+- [x] T006 [P] Setup SQLite configuration in backend/src/main/resources/application.yml
 
 ---
 
@@ -41,12 +41,12 @@ Web application structure:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T007 Setup database schema and JPA configuration in backend/src/main/java/com/banking/config/DatabaseConfig.java
-- [ ] T008 Configure CORS and security settings in backend/src/main/java/com/banking/config/SecurityConfig.java
-- [ ] T009 [P] Setup global error handling in backend/src/main/java/com/banking/config/GlobalExceptionHandler.java
-- [ ] T010 [P] Configure shared API service in frontend/src/app/shared/api.service.ts
-- [ ] T011 [P] Setup routing configuration in frontend/src/app/app-routing.module.ts
-- [ ] T012 Create base application entry point in backend/src/main/java/com/banking/BankingApplication.java
+- [x] T007 Setup database schema and JPA configuration in backend/src/main/java/com/banking/config/DatabaseConfig.java
+- [x] T008 Configure CORS and security settings in backend/src/main/java/com/banking/config/SecurityConfig.java
+- [x] T009 [P] Setup global error handling in backend/src/main/java/com/banking/config/GlobalExceptionHandler.java
+- [x] T010 [P] Configure shared API service in frontend/src/app/shared/api.service.ts
+- [x] T011 [P] Setup routing configuration in frontend/src/app/app-routing.module.ts
+- [x] T012 Create base application entry point in backend/src/main/java/com/banking/BankingApplication.java
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -114,6 +114,7 @@ Web application structure:
 - [ ] T043 [US2] Create TransactionRepository interface in backend/src/main/java/com/banking/transactions/TransactionRepository.java (depends on T041)
 - [ ] T044 [US2] Implement AccountService in backend/src/main/java/com/banking/accounts/AccountService.java (depends on T042)
 - [ ] T045 [US2] Implement TransactionService in backend/src/main/java/com/banking/transactions/TransactionService.java (depends on T043)
+- [ ] T045A [US2] Add transaction limit validation to TransactionService.getRecentTransactions() method ensuring exactly 5 transactions returned per FR-006
 - [ ] T046 [US2] Implement AccountController in backend/src/main/java/com/banking/accounts/AccountController.java (depends on T044)
 - [ ] T047 [US2] Implement TransactionController in backend/src/main/java/com/banking/transactions/TransactionController.java (depends on T045)
 - [ ] T048 [US2] Add initial account and transaction test data in backend/src/main/resources/data.sql (depends on T040, T041)
@@ -150,7 +151,7 @@ Web application structure:
 ### Implementation for User Story 3
 
 - [ ] T065 [P] [US3] Create TransferRequest DTO in backend/src/main/java/com/banking/transfers/TransferRequest.java
-- [ ] T066 [US3] Implement TransferService with transaction management in backend/src/main/java/com/banking/transfers/TransferService.java (depends on T044, T045)
+- [ ] T066 [US3] Implement TransferService with transaction management in backend/src/main/java/com/banking/transfers/TransferService.java (depends on T044 AccountService.getAccountById() and AccountService.updateBalance(), T045 TransactionService.createTransaction())
 - [ ] T067 [US3] Implement TransferController in backend/src/main/java/com/banking/transfers/TransferController.java (depends on T066)
 - [ ] T068 [P] [US3] Create transfer.model.ts in frontend/src/app/transfers/transfer.model.ts
 - [ ] T069 [P] [US3] Create transfer.service.ts in frontend/src/app/transfers/transfer.service.ts
@@ -168,13 +169,20 @@ Web application structure:
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T075 [P] Add comprehensive error handling across all controllers in backend/src/main/java/com/banking/config/GlobalExceptionHandler.java
-- [ ] T076 [P] Add loading states and error messages in frontend shared components
-- [ ] T077 [P] Enhance UI styling with Tailwind CSS across all components
-- [ ] T078 [P] Add form validation feedback in all frontend forms
-- [ ] T079 [P] Add proper logging throughout backend services
-- [ ] T080 [P] Run quickstart.md validation and setup verification
+- [ ] T075 [P] Add comprehensive error handling in backend/src/main/java/com/banking/config/GlobalExceptionHandler.java
+  **Acceptance**: All controller exceptions return proper HTTP status codes and error messages per contracts/api-spec.yaml ErrorResponse schema
+- [ ] T076 [P] Add loading states and error messages in frontend/src/app/shared/error-handler.service.ts
+  **Acceptance**: All HTTP requests show loading spinner, network errors display user-friendly messages, 401 errors redirect to login
+- [ ] T077 [P] Enhance UI styling with Tailwind CSS in frontend/src/styles.scss and component templates
+  **Acceptance**: All components use consistent spacing (p-4, m-2), colors (blue-600 primary, red-500 error), and responsive design (sm:, md: breakpoints)
+- [ ] T078 [P] Add form validation feedback in frontend/src/app/shared/validation.service.ts
+  **Acceptance**: All forms show real-time validation errors, success states, and field-level error messages
+- [ ] T079 [P] Add proper logging in backend/src/main/java/com/banking/config/LoggingConfig.java
+  **Acceptance**: All service methods log entry/exit, errors logged with stack traces, no sensitive data (passwords) in logs
+- [ ] T080 [P] Run quickstart.md validation per quickstart.md section "Verification Steps"
+  **Acceptance**: All setup commands execute successfully, application starts on port 8080, sample data loads correctly
 - [ ] T081 Code cleanup and refactoring for maintainability
+  **Acceptance**: No TODO comments remain, all methods <20 lines, cyclomatic complexity <10, test coverage >80%
 
 ---
 
@@ -268,9 +276,9 @@ With multiple developers:
 
 ## Summary
 
-- **Total Tasks**: 81 tasks across 6 phases
+- **Total Tasks**: 82 tasks across 6 phases
 - **MVP Scope**: User Story 1 (Authentication) - 18 tasks
-- **Full MVP Scope**: All 3 user stories - 74 implementation tasks + 7 polish tasks
+- **Full MVP Scope**: All 3 user stories - 75 implementation tasks + 7 polish tasks
 - **Parallel Opportunities**: 46 tasks marked [P] can run in parallel within their phases
 - **TDD Coverage**: 19 test tasks ensuring all functionality is test-driven
 - **Independent Stories**: Each user story can be completed and tested independently
@@ -278,7 +286,7 @@ With multiple developers:
 
 ### Task Count per User Story
 - **User Story 1 (Authentication)**: 18 tasks (6 tests + 12 implementation)
-- **User Story 2 (Account Overview)**: 30 tasks (9 tests + 21 implementation) 
+- **User Story 2 (Account Overview)**: 31 tasks (9 tests + 22 implementation)
 - **User Story 3 (Money Transfer)**: 14 tasks (4 tests + 10 implementation)
 
 ### Implementation Bridge

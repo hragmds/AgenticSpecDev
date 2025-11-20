@@ -56,13 +56,22 @@ A user can transfer money between their own accounts by selecting source and des
 
 ---
 
-### Edge Cases
+### Edge Case Acceptance Criteria
 
-- What happens when a user has zero account balance and attempts a transfer?
-- How does the system handle simultaneous transfers that might overdraw an account?
-- What happens when the transfer dialog is closed without completing the transaction?
-- How does the system behave when account data is temporarily unavailable?
-- What happens when a user tries to transfer money to the same source account?
+1. **Zero Balance Transfer Attempt**:
+   - **Given** a user has a source account with $0.00 balance, **When** they attempt to transfer any amount, **Then** the system displays error "Transfer failed: Insufficient funds. Available balance: $0.00"
+
+2. **Same Account Transfer**:
+   - **Given** a user selects the same account for source and destination, **When** they attempt to confirm transfer, **Then** the system displays error "Cannot transfer to the same account. Please select a different destination."
+
+3. **Transfer Dialog Cancellation**:
+   - **Given** a user has entered transfer details, **When** they close the dialog without confirming, **Then** no transaction is created and account balances remain unchanged
+
+4. **Account Data Unavailable**:
+   - **Given** account data cannot be loaded, **When** dashboard loads, **Then** display "Account information temporarily unavailable. Please refresh the page."
+
+5. **Negative Amount Input**:
+   - **Given** a user enters a negative amount, **When** they attempt to confirm, **Then** display "Amount must be greater than zero"
 
 ## Requirements *(mandatory)*
 
@@ -87,9 +96,8 @@ A user can transfer money between their own accounts by selecting source and des
 ### Key Entities
 
 - **User**: Represents an authenticated banking customer with username/password credentials and multiple accounts
-- **Account**: Represents a financial account with a unique identifier, name (checking or savings), account type, current balance, and transaction history
+- **Account**: Represents a financial account with a unique identifier, account type (checking or savings), display name, current balance, and transaction history
 - **Transaction**: Represents a money movement with timestamp, amount, source account, destination account, and optional note
-- **Session**: Represents an authenticated user session maintaining login state and user context
 
 ## Clarifications
 

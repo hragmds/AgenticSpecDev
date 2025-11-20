@@ -1,0 +1,1 @@
+{"ast":null,"code":"import 'zone.js/dist/zone';","map":{"version":3,"names":[],"sources":["/Users/hrag/Documents/Workspace/AI/SpecKitDemo/AgenticSddDemo2/frontend/src/polyfills.ts"],"sourcesContent":["import 'zone.js/dist/zone';"],"mappings":"AAAA,OAAO,mBAAmB","ignoreList":[]},"metadata":{},"sourceType":"module","externalDependencies":[]}

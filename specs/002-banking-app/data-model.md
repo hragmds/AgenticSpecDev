@@ -73,7 +73,7 @@ Represents a financial account belonging to a user with balance and type informa
 
 ### Transaction Entity
 
-Represents a money movement between accounts with audit trail information.
+Represents a money transfer between accounts with timestamp and audit information.
 
 **Attributes**:
 - `id` (Long): Primary key, auto-generated
