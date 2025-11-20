@@ -545,11 +545,50 @@ Frontend handles 401:
 - No additional design patterns beyond standard MVC
 - No caching, no optimization, pure MVP scope
 
-## Complexity Tracking
+## Document References Quick Guide
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+When implementing each component, reference these documents:
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| Component Type | Primary Reference | Secondary References |
+|----------------|-------------------|---------------------|
+| **JPA Entities** | [data-model.md](./data-model.md) → JPA Entity Mappings | [data-model.md](./data-model.md) → Entity Definitions |
+| **Database Schema** | [data-model.md](./data-model.md) → Database Schema (SQLite DDL) | [data-model.md](./data-model.md) → Sample Data |
+| **REST Endpoints** | [contracts/api.yaml](./contracts/api.yaml) → paths section | [Module Breakdown](#module-breakdown) → specific module |
+| **DTOs** | [contracts/api.yaml](./contracts/api.yaml) → components/schemas | [data-model.md](./data-model.md) → TypeScript Interfaces |
+| **Service Logic** | [Data Flow](#data-flow) → specific flow | [Module Breakdown](#module-breakdown) → Key Methods |
+| **Validation Rules** | [spec.md](./spec.md) → Functional Requirements | [data-model.md](./data-model.md) → Data Validation Summary |
+| **Frontend Components** | [Frontend Modules](#frontend-modules) → specific module | [Architecture Overview](#architecture-overview) |
+| **TypeScript Models** | [data-model.md](./data-model.md) → TypeScript Interfaces | [contracts/api.yaml](./contracts/api.yaml) → schemas |
+| **Configuration** | [research.md](./research.md) → Best Practices | [quickstart.md](./quickstart.md) |
+| **Testing Patterns** | [research.md](./research.md) → Testing Strategies | Constitution → Principle II (TDD) |
+
+## Critical Success Factors
+
+Before marking implementation complete, verify:
+
+1. **All Functional Requirements Met** (FR-001 through FR-019)
+   - Cross-reference each FR in [spec.md](./spec.md) with implemented feature
+   - Mark as ✅ in checklist
+
+2. **All Acceptance Scenarios Pass**
+   - Test each scenario from User Stories (P1, P2, P3)
+   - Document test results
+
+3. **All Edge Cases Addressed**
+   - Verify behavior for each edge case in [spec.md](./spec.md)
+   - At minimum, handle gracefully with error messages
+
+4. **All Success Criteria Met** (SC-001 through SC-008)
+   - Measure performance (dashboard load <2s, transfer <1s)
+   - Verify transfer validation prevents 100% of invalid transfers
+
+5. **TDD Compliance**
+   - Every component has tests written first
+   - All tests pass (backend: `./gradlew test`, frontend: `ng test`)
+   - Code coverage >80%
+
+6. **Constitution Compliance**
+   - No features outside spec
+   - No security hardening beyond MVP
+   - No performance optimization
+   - Simplest possible implementation
