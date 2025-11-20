@@ -105,9 +105,9 @@ Web application structure:
 - [x] T034 [P] [US2] Write TransactionService unit test in backend/src/test/java/com/banking/transactions/TransactionServiceTest.java
 - [x] T035 [P] [US2] Write AccountController integration test in backend/src/test/java/com/banking/accounts/AccountControllerTest.java
 - [x] T036 [P] [US2] Write TransactionController integration test in backend/src/test/java/com/banking/transactions/TransactionControllerTest.java
-- [ ] T037 [P] [US2] Write DashboardComponent test in frontend/src/test/dashboard/dashboard.component.spec.ts
-- [ ] T038 [P] [US2] Write AccountService test in frontend/src/test/accounts/account.service.spec.ts
-- [ ] T039 [P] [US2] Write TransactionService test in frontend/src/test/transactions/transaction.service.spec.ts
+- [x] T037 [P] [US2] Write DashboardComponent test in frontend/src/test/dashboard/dashboard.component.spec.ts
+- [x] T038 [P] [US2] Write AccountService test in frontend/src/test/accounts/account.service.spec.ts
+- [x] T039 [P] [US2] Write TransactionService test in frontend/src/test/transactions/transaction.service.spec.ts
 
 ### Implementation for User Story 2
 
