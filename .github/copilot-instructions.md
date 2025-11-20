@@ -4,4 +4,4 @@ and frontend is in /frontend.
 run commands like npm for frontend there.
 
 
-Start the Spring Boot app in the background with ./gradlew bootRun & and then use curl to hit http://localhost:8080/... once it’s up.
+when testing the back end, ask the user to start the backend server manuall then run the tests against it.
